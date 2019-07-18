@@ -1,7 +1,17 @@
 # Image Resizer
 
-[TODO. There will be project description]
 
-# Project Goals
+## Описание
 
-The code is written for educational purposes. Training course for web-developers - [DEVMAN.org](https://devman.org)
+## Требования
+
+*Python*
+
+## Как запустить
+
+## Примеры
+
+
+## Цели проекта
+
+Код создан в учебных целях. В рамках учебного курса по веб-разработке - [DEVMAN.org](https://devman.org)
