@@ -39,6 +39,9 @@ def resize_image(image, width=None, height=None, scale=None, output=None):
     if scale and (width or height):
         raise ValueError('You cannot scale the image when the dimensions are specified')
 
+    if original_width // original_height != width // height:
+        print('Proportion do not match')
+
     if scale and scale > 0:
         img = img.resize((original_width * scale, original_height * scale))
     elif scale and scale < 0:
@@ -46,8 +49,6 @@ def resize_image(image, width=None, height=None, scale=None, output=None):
 
     if width and height:
         img = img.resize((width, height))
-        if original_width // original_height != width // height:
-            print('Proportion do not match')
     elif width:
         img.thumbnail((width, original_height), Image.ANTIALIAS)
     elif height:
