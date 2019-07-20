@@ -25,10 +25,10 @@ def create_parser():
     return parser
 
 
-def is_valid_extension(file, extensions=('.jpg', '.jpeg', '.png')):
-    _, extension = os.path.splitext(file)
+def is_valid_extension(imagepath, extensions=('.jpg', '.jpeg', '.png')):
+    _, extension = os.path.splitext(imagepath)
     if extension.lower() in extensions:
-        return file
+        return imagepath
     raise argparse.ArgumentTypeError('not valid extension. Needed {}'.format(extensions))
 
 
