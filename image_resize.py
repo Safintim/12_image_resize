@@ -6,6 +6,8 @@ from PIL import Image
 def main():
     parser = create_parser()
     namespace = parser.parse_args()
+    if namespace.scale and (namespace.width or namespace.height):
+        raise ValueError('You cannot scale the image when the dimensions are specified')
     resize_image(
         image=namespace.image,
         height=namespace.height,
@@ -36,16 +38,11 @@ def resize_image(image, width=None, height=None, scale=None, output=None):
     img = Image.open(image)
     original_width, original_height = img.size
 
-    if scale and (width or height):
-        raise ValueError('You cannot scale the image when the dimensions are specified')
-
     if original_width // original_height != width // height:
         print('Proportion do not match')
 
-    if scale and scale > 0:
-        img = img.resize((original_width * scale, original_height * scale))
-    elif scale and scale < 0:
-        img = img.resize((original_width // abs(scale), original_height // abs(scale)))
+    if scale:
+        img = scale_image(img, original_width, original_height, scale)
 
     if width and height:
         img = img.resize((width, height))
@@ -54,12 +51,21 @@ def resize_image(image, width=None, height=None, scale=None, output=None):
     elif height:
         img.thumbnail((original_width, height), Image.ANTIALIAS)
 
-    if not output:
-        image_name, extension = os.path.splitext(image)
-        new_image_name = '{}_{}x{}{}'.format(image_name, img.size[0], img.size[1], extension)
-        img.save(new_image_name)
-    img.save(output)
+    save_image(image, img, output)
 
+
+def scale_image(img, original_width, original_height, scale):
+    if scale > 0:
+        return img.resize((original_width * scale, original_height * scale))
+    return img.resize((original_width // abs(scale), original_height // abs(scale)))
+
+
+def save_image(imagepath, img_obj, output):
+    if not output:
+        image_name, extension = os.path.splitext(imagepath)
+        new_image_name = '{}_{}x{}{}'.format(image_name, img_obj.size[0], img_obj.size[1], extension)
+        img_obj.save(new_image_name)
+    img_obj.save(output)
 
 if __name__ == '__main__':
     main()
